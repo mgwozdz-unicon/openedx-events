@@ -32,6 +32,10 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	tox -e docs
 	$(BROWSER)docs/_build/html/index.html
 
+serve_docs: ## serve the built docs locally to preview the RtD in the browser with theme working
+	pip install -qr requirements/doc.txt
+	make -e -C docs serve_docs
+
 # Define PIP_COMPILE_OPTS=-v to get more information during make upgrade.
 PIP_COMPILE = pip-compile --upgrade $(PIP_COMPILE_OPTS)
 
