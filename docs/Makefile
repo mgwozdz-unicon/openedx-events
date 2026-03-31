@@ -20,4 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 serve_docs: ## serve the built docs locally to preview the site in the browser
-	sphinx-autobuild . $(BUILDDIR)/html
+	sphinx-autobuild . $(BUILDDIR)/html --port 9898
