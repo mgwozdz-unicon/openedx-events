@@ -1,5 +1,7 @@
 """
-Utils used by Open edX event tests.
+Test utilities for use by consumers of openedx-events.
+
+Provides mixins that help isolate Open edX event state between test classes.
 """
 
 from openedx_events.tooling import OpenEdxPublicSignal
@@ -100,11 +102,11 @@ class OpenEdxEventsTestMixin(EventsIsolationMixin):
 
     Example usage:
 
-        class MyTestCase(TestCase, OpenEdxEventsTestCase):
+        class MyTestCase(TestCase, OpenEdxEventsTestMixin):
 
             ENABLED_OPENEDX_EVENTS = ['org.openedx.learning.student.registration.completed.v1']
 
-    This class assumes that's it's being used in conjunction TestCase or TestCase subclasses.
+    This class assumes that it's being used in conjunction with TestCase or TestCase subclasses.
     """
 
     ENABLED_OPENEDX_EVENTS = []
@@ -116,6 +118,17 @@ class OpenEdxEventsTestMixin(EventsIsolationMixin):
         """
         super().setUpClass()
         cls().start_events_isolation()
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Re-enable all events after class teardown.
+
+        Restores event state so subsequent test classes running in the same
+        process are not affected by this class's event isolation.
+        """
+        cls().enable_all_events()
+        super().tearDownClass()
 
     @classmethod
     def start_events_isolation(cls):
